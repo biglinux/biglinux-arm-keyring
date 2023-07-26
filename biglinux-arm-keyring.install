@@ -19,7 +19,7 @@ post_upgrade() {
 	fi
 	
 	if [ -z "$(grep biglinux-arm-keyring /etc/pacman.conf)" ];then
-		sed -i 's/archlinuxarm-keyring/archlinuxarm-keyring biglinux-arm-keyring' /etc/pacman.conf
+		sed -i 's/archlinuxarm-keyring/archlinuxarm-keyring biglinux-arm-keyring/' /etc/pacman.conf
 	fi
 }
 
