@@ -1,56 +1,40 @@
-# msg() {
-#     local ALL_OFF="\e[1;0m"
-#     local BOLD="\e[1;1m"
-#     local GREEN="${BOLD}\e[1;32m"
-# 
-#     local MESSAGE=$1
-#     shift 1
-#     printf "${GREEN}==>${ALL_OFF}${BOLD} ${MESSAGE}${ALL_OFF}\n" "$@" >&2
-# }
+msg() {
+    local ALL_OFF="\e[1;0m"
+    local BOLD="\e[1;1m"
+    local GREEN="${BOLD}\e[1;32m"
 
-# post_upgrade() {
-# 	if usr/bin/pacman-key -l >/dev/null 2>&1; then
-# 		usr/bin/pacman-key --populate biglinux
-# 	else
-# 		pacman-key --init
-# 		pacman-key --populate biglinux
-# 		#echo " >>> Run \`pacman-key --init\` to set up your pacman keyring."
-# 		#echo " >>> Then run \`pacman-key --populate biglinux\` to install the BigLinux keyring."
-# 	fi
-# 	
-# 	if [ -z "$(grep biglinux-arm-keyring /etc/pacman.conf)" ];then
-# 		sed -i 's/archlinuxarm-keyring/archlinuxarm-keyring biglinux-arm-keyring/' /etc/pacman.conf
-# 	fi
-# }
-
-# post_install() {
-# 	if [ -x usr/bin/pacman-key ]; then
-# 		post_upgrade
-# 	fi
-# 	
-# 	#add keyring in rootfs
-# 	NSPAWN='systemd-nspawn -q --resolv-conf=copy-host --timezone=off -D'
-# 	ROOTFS_IMG='/var/lib/manjaro-arm-tools/img'
-# 	ARCH='aarch64'
-# 	CHROOTDIR="${ROOTFS_IMG}/rootfs_${ARCH}"
-# 	$NSPAWN $CHROOTDIR pacman-key --init > /dev/null 2>&1
-#     $NSPAWN $CHROOTDIR pacman-key --populate archlinuxarm manjaro manjaro-arm biglinux > /dev/null 2>&1
-#     if [ -z "$(grep biglinux-arm-keyring /etc/pacman.conf)" ];then
-# 		sed -i 's/archlinuxarm-keyring/archlinuxarm-keyring biglinux-arm-keyring/' /etc/pacman.conf
-# 	fi
-# }
+    local MESSAGE=$1
+    shift 1
+    printf "${GREEN}==>${ALL_OFF}${BOLD} ${MESSAGE}${ALL_OFF}\n" "$@" >&2
+}
 
 post_upgrade() {
 	if usr/bin/pacman-key -l >/dev/null 2>&1; then
 		usr/bin/pacman-key --populate biglinux
 	else
-		echo " >>> Run \`pacman-key --init\` to set up your pacman keyring."
-		echo " >>> Then run \`pacman-key --populate biglinux\` to install the Manjaro keyring."
+		pacman-key --init
+		pacman-key --populate biglinux
+		#echo " >>> Run \`pacman-key --init\` to set up your pacman keyring."
+		#echo " >>> Then run \`pacman-key --populate biglinux\` to install the BigLinux keyring."
+	fi
+	
+	if [ -z "$(grep biglinux-arm-keyring /etc/pacman.conf)" ];then
+		sed -i 's/archlinuxarm-keyring/archlinuxarm-keyring biglinux-arm-keyring/' /etc/pacman.conf
 	fi
 }
 
 post_install() {
 	if [ -x usr/bin/pacman-key ]; then
 		post_upgrade
+	fi
+	
+	#add keyring in rootfs
+	ROOTFS_IMG='/var/lib/manjaro-arm-tools/img'
+	ARCH='aarch64'
+	CHROOTDIR="${ROOTFS_IMG}/rootfs_${ARCH}"
+	$CHROOTDIR pacman-key --init
+    $CHROOTDIR pacman-key --populate archlinuxarm manjaro manjaro-arm biglinux
+    if [ -z "$(grep biglinux-arm-keyring /etc/pacman.conf)" ];then
+		sed -i 's/archlinuxarm-keyring/archlinuxarm-keyring biglinux-arm-keyring/' /etc/pacman.conf
 	fi
 }
