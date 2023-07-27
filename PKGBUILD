@@ -8,8 +8,8 @@
 # Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=biglinux-arm-keyring
-pkgver=20220712
-pkgrel=3
+pkgver=$(date +%y.%m.%d)
+pkgrel=$(date +%H%M)
 pkgdesc='BigLinux PGP keyring for ARM'
 arch=('any')
 url='http://biglinux.com.br'
