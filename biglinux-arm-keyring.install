@@ -23,18 +23,18 @@ post_upgrade() {
 	fi
 }
 
-post_install() {
-	if [ -x usr/bin/pacman-key ]; then
-		post_upgrade
-	fi
-	
-	#add keyring in rootfs
-	ROOTFS_IMG='/var/lib/manjaro-arm-tools/img'
-	ARCH='aarch64'
-	CHROOTDIR="${ROOTFS_IMG}/rootfs_${ARCH}"
-	$CHROOTDIR pacman-key --init
-    $CHROOTDIR pacman-key --populate archlinuxarm manjaro manjaro-arm biglinux
-    if [ -z "$(grep biglinux-arm-keyring /etc/pacman.conf)" ];then
-		sed -i 's/archlinuxarm-keyring/archlinuxarm-keyring biglinux-arm-keyring/' /etc/pacman.conf
-	fi
-}
+# post_install() {
+# 	if [ -x usr/bin/pacman-key ]; then
+# 		post_upgrade
+# 	fi
+# 	
+# 	#add keyring in rootfs
+# 	ROOTFS_IMG='/var/lib/manjaro-arm-tools/img'
+# 	ARCH='aarch64'
+# 	CHROOTDIR="${ROOTFS_IMG}/rootfs_${ARCH}"
+# 	$CHROOTDIR pacman-key --init
+#     $CHROOTDIR pacman-key --populate archlinuxarm manjaro manjaro-arm biglinux
+#     if [ -z "$(grep biglinux-arm-keyring /etc/pacman.conf)" ];then
+# 		sed -i 's/archlinuxarm-keyring/archlinuxarm-keyring biglinux-arm-keyring/' /etc/pacman.conf
+# 	fi
+# }
